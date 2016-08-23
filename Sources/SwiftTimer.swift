@@ -30,7 +30,7 @@ class SwiftTimer {
     }
     
     deinit {
-        print("deinit")
+        self.internalTimer.cancel()
     }
     
     func start() {
@@ -49,7 +49,7 @@ class SwiftTimer {
     
 }
 
-// Throttle
+//MARK: Throttle
 extension SwiftTimer {
     private static var timers = [String:DispatchSourceTimer]()
     
