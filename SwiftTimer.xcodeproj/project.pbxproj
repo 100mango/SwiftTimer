@@ -13,7 +13,11 @@
 		BF84D1B61D6C0D0400B5B511 /* SwiftTimer.h in Headers */ = {isa = PBXBuildFile; fileRef = BF84D16C1D6C016500B5B511 /* SwiftTimer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BF84D1B81D6C0D6800B5B511 /* SwiftTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF84D1B71D6C0D6800B5B511 /* SwiftTimer.swift */; };
 		BF84D1C01D6C0F1600B5B511 /* SwiftTimer_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF84D1BF1D6C0F1600B5B511 /* SwiftTimer_iOSTests.swift */; };
-		BF84D1C21D6C0F1600B5B511 /* SwiftTimer iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF84D1691D6C016500B5B511 /* SwiftTimer iOS.framework */; };
+		BF84D1C21D6C0F1600B5B511 /* SwiftTimer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF84D1691D6C016500B5B511 /* SwiftTimer.framework */; };
+		BF84D1C81D6C106E00B5B511 /* SwiftTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF84D1B71D6C0D6800B5B511 /* SwiftTimer.swift */; };
+		BF84D1C91D6C106E00B5B511 /* SwiftTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF84D1B71D6C0D6800B5B511 /* SwiftTimer.swift */; };
+		BF84D1CA1D6C106F00B5B511 /* SwiftTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF84D1B71D6C0D6800B5B511 /* SwiftTimer.swift */; };
+		BF84D1CB1D6C10E600B5B511 /* SwiftTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF84D1B71D6C0D6800B5B511 /* SwiftTimer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,11 +31,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		BF84D1691D6C016500B5B511 /* SwiftTimer iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "SwiftTimer iOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF84D1691D6C016500B5B511 /* SwiftTimer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftTimer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF84D16C1D6C016500B5B511 /* SwiftTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwiftTimer.h; path = Sources/SwiftTimer.h; sourceTree = "<group>"; };
-		BF84D1771D6C01A600B5B511 /* SwiftTimer watchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "SwiftTimer watchOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BF84D1841D6C01C000B5B511 /* SwiftTimer tvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "SwiftTimer tvOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BF84D1911D6C01DD00B5B511 /* SwiftTimer macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "SwiftTimer macOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF84D1771D6C01A600B5B511 /* SwiftTimer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftTimer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF84D1841D6C01C000B5B511 /* SwiftTimer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftTimer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF84D1911D6C01DD00B5B511 /* SwiftTimer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftTimer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF84D1A71D6C032800B5B511 /* Info-macOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Info-macOS.plist"; path = "Sources/Info-macOS.plist"; sourceTree = "<group>"; };
 		BF84D1A81D6C032800B5B511 /* Info-tvOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Info-tvOS.plist"; path = "Sources/Info-tvOS.plist"; sourceTree = "<group>"; };
 		BF84D1A91D6C032800B5B511 /* Info-watchOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Info-watchOS.plist"; path = "Sources/Info-watchOS.plist"; sourceTree = "<group>"; };
@@ -75,7 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF84D1C21D6C0F1600B5B511 /* SwiftTimer iOS.framework in Frameworks */,
+				BF84D1C21D6C0F1600B5B511 /* SwiftTimer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,10 +98,10 @@
 		BF84D16A1D6C016500B5B511 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BF84D1691D6C016500B5B511 /* SwiftTimer iOS.framework */,
-				BF84D1771D6C01A600B5B511 /* SwiftTimer watchOS.framework */,
-				BF84D1841D6C01C000B5B511 /* SwiftTimer tvOS.framework */,
-				BF84D1911D6C01DD00B5B511 /* SwiftTimer macOS.framework */,
+				BF84D1691D6C016500B5B511 /* SwiftTimer.framework */,
+				BF84D1771D6C01A600B5B511 /* SwiftTimer.framework */,
+				BF84D1841D6C01C000B5B511 /* SwiftTimer.framework */,
+				BF84D1911D6C01DD00B5B511 /* SwiftTimer.framework */,
 				BF84D1BD1D6C0F1600B5B511 /* SwiftTimer iOSTests.xctest */,
 			);
 			name = Products;
@@ -178,7 +182,7 @@
 			);
 			name = "SwiftTimer iOS";
 			productName = "SwiftTimer iOS";
-			productReference = BF84D1691D6C016500B5B511 /* SwiftTimer iOS.framework */;
+			productReference = BF84D1691D6C016500B5B511 /* SwiftTimer.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		BF84D1761D6C01A600B5B511 /* SwiftTimer watchOS */ = {
@@ -196,7 +200,7 @@
 			);
 			name = "SwiftTimer watchOS";
 			productName = "SwiftTimer watchOS";
-			productReference = BF84D1771D6C01A600B5B511 /* SwiftTimer watchOS.framework */;
+			productReference = BF84D1771D6C01A600B5B511 /* SwiftTimer.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		BF84D1831D6C01C000B5B511 /* SwiftTimer tvOS */ = {
@@ -214,7 +218,7 @@
 			);
 			name = "SwiftTimer tvOS";
 			productName = "SwiftTimer tvOS";
-			productReference = BF84D1841D6C01C000B5B511 /* SwiftTimer tvOS.framework */;
+			productReference = BF84D1841D6C01C000B5B511 /* SwiftTimer.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		BF84D1901D6C01DD00B5B511 /* SwiftTimer macOS */ = {
@@ -232,7 +236,7 @@
 			);
 			name = "SwiftTimer macOS";
 			productName = "SwiftTimer macOS";
-			productReference = BF84D1911D6C01DD00B5B511 /* SwiftTimer macOS.framework */;
+			productReference = BF84D1911D6C01DD00B5B511 /* SwiftTimer.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		BF84D1BC1D6C0F1600B5B511 /* SwiftTimer iOSTests */ = {
@@ -349,6 +353,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF84D1C81D6C106E00B5B511 /* SwiftTimer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,6 +369,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF84D1C91D6C106E00B5B511 /* SwiftTimer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,6 +377,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF84D1CA1D6C106F00B5B511 /* SwiftTimer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,6 +386,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF84D1C01D6C0F1600B5B511 /* SwiftTimer_iOSTests.swift in Sources */,
+				BF84D1CB1D6C10E600B5B511 /* SwiftTimer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,7 +466,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "mango.SwiftTimer-iOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SwiftTimer;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -516,7 +524,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "mango.SwiftTimer-iOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SwiftTimer;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -580,7 +588,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "mango.SwiftTimer-watchOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SwiftTimer;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -638,7 +646,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "mango.SwiftTimer-watchOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SwiftTimer;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -702,7 +710,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "mango.SwiftTimer-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SwiftTimer;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -759,7 +767,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "mango.SwiftTimer-tvOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SwiftTimer;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -826,7 +834,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "mango.SwiftTimer-macOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SwiftTimer;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -884,7 +892,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "mango.SwiftTimer-macOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SwiftTimer;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -897,6 +905,7 @@
 		BF84D1C61D6C0F1600B5B511 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -951,6 +960,7 @@
 		BF84D1C71D6C0F1600B5B511 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
