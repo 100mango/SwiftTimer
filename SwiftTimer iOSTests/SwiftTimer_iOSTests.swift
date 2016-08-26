@@ -24,7 +24,7 @@ class SwiftTimer_iOSTests: XCTestCase {
         
         let expectation = self.expectation(description: "timer fire")
 
-        let timer = SwiftTimer(interval: .seconds(2)) {
+        let timer = SwiftTimer(interval: .seconds(2)) { _ in
             print("timer fire")
             expectation.fulfill()
         }
@@ -37,7 +37,7 @@ class SwiftTimer_iOSTests: XCTestCase {
         let expectation = self.expectation(description: "timer fire")
 
         var count = 0
-        let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) {
+        let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) { _ in
             count = count + 1
             if count == 2 {
                 expectation.fulfill()
@@ -52,7 +52,7 @@ class SwiftTimer_iOSTests: XCTestCase {
         let expectation = self.expectation(description: "throttle")
         
         var count = 0
-        let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) {
+        let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) { _ in
             
             SwiftTimer.throttle(interval: .fromSeconds(1.5), identifier: "not pass") {
                 XCTFail("should not pass")
@@ -75,17 +75,16 @@ class SwiftTimer_iOSTests: XCTestCase {
         let expectation = self.expectation(description: "rescheduleRepeating")        
         
         var count = 0
-        let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) {
+        let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) { timer in
             count = count + 1
             print(Date())
+            if count == 3 {
+                timer.rescheduleRepeating(interval: .seconds(3))
+            }
             if count == 4 {
                 expectation.fulfill()
             }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            timer.rescheduleRepeating(interval: .seconds(3))
-        }
-        
         timer.start()
         self.waitForExpectations(timeout: 6.1, handler: nil)
     }

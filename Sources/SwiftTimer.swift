@@ -16,14 +16,16 @@ public class SwiftTimer {
     
     public let repeats: Bool
     
-    private let handler: @escaping () -> Void
+    private let handler: (SwiftTimer) -> Void
     
-    public init(interval: DispatchTimeInterval, repeats: Bool = false, queue: DispatchQueue = .main , handler: @escaping () -> Void) {
+    public init(interval: DispatchTimeInterval, repeats: Bool = false, queue: DispatchQueue = .main , handler: @escaping (SwiftTimer) -> Void) {
         
-        internalTimer = DispatchSource.makeTimerSource(queue: queue)
-        internalTimer.setEventHandler(handler: handler)
         self.handler = handler
         self.repeats = repeats
+        internalTimer = DispatchSource.makeTimerSource(queue: queue)
+        internalTimer.setEventHandler {
+            handler(self)
+        }
         
         if repeats {
             internalTimer.scheduleRepeating(deadline: .now() + interval, interval: interval)
@@ -32,7 +34,7 @@ public class SwiftTimer {
         }
     }
     
-    public static func repeaticTimer(interval: DispatchTimeInterval, queue: DispatchQueue = .main , handler: @escaping () -> Void) -> SwiftTimer {
+    public static func repeaticTimer(interval: DispatchTimeInterval, queue: DispatchQueue = .main , handler: @escaping (SwiftTimer) -> Void) -> SwiftTimer {
         return SwiftTimer(interval: interval, repeats: true, queue: queue, handler: handler)
     }
     
@@ -43,9 +45,9 @@ public class SwiftTimer {
     //You can use this method to fire a repeating timer without interrupting its regular firing schedule. If the timer is non-repeating, it is automatically invalidated after firing, even if its scheduled fire date has not arrived.
     public func fire() {
         if repeats {
-            handler()
+            handler(self)
         } else {
-            handler()
+            handler(self)
             internalTimer.cancel()
         }
     }
