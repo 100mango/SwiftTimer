@@ -4,7 +4,7 @@
 
 Simple and Elegant Timer
 
-中文介绍：[打造一个优雅的Timer]()
+中文介绍：[打造一个优雅的Timer](https://github.com/100mango/zen/blob/master/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E4%BC%98%E9%9B%85%E7%9A%84Timer/make%20a%20timer.md)
 
 ##Usage
 
