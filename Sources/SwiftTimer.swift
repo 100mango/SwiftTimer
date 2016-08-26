@@ -8,16 +8,23 @@
 
 import Foundation
 
-class SwiftTimer {
+public class SwiftTimer {
     
     private let internalTimer: DispatchSourceTimer
     
     private var isRunning = false
     
-    init(interval: DispatchTimeInterval, repeats: Bool = false, queue: DispatchQueue = .main , handler: @escaping () -> Void) {
+    public let repeats: Bool
+    
+    private let handler: @escaping () -> Void
+    
+    public init(interval: DispatchTimeInterval, repeats: Bool = false, queue: DispatchQueue = .main , handler: @escaping () -> Void) {
         
         internalTimer = DispatchSource.makeTimerSource(queue: queue)
         internalTimer.setEventHandler(handler: handler)
+        self.handler = handler
+        self.repeats = repeats
+        
         if repeats {
             internalTimer.scheduleRepeating(deadline: .now() + interval, interval: interval)
         } else {
@@ -25,7 +32,7 @@ class SwiftTimer {
         }
     }
     
-    static func repeaticTimer(interval: DispatchTimeInterval, queue: DispatchQueue = .main , handler: @escaping () -> Void) -> SwiftTimer {
+    public static func repeaticTimer(interval: DispatchTimeInterval, queue: DispatchQueue = .main , handler: @escaping () -> Void) -> SwiftTimer {
         return SwiftTimer(interval: interval, repeats: true, queue: queue, handler: handler)
     }
     
@@ -33,29 +40,43 @@ class SwiftTimer {
         self.internalTimer.cancel()
     }
     
-    func start() {
+    //You can use this method to fire a repeating timer without interrupting its regular firing schedule. If the timer is non-repeating, it is automatically invalidated after firing, even if its scheduled fire date has not arrived.
+    public func fire() {
+        if repeats {
+            handler()
+        } else {
+            handler()
+            internalTimer.cancel()
+        }
+    }
+    
+    public func start() {
         if !isRunning {
             internalTimer.resume()
             isRunning = true
         }
     }
     
-    func stop() {
+    public func suspend() {
         if isRunning {
             internalTimer.suspend()
             isRunning = false
         }
     }
     
+    public func rescheduleRepeating(interval: DispatchTimeInterval) {
+        if repeats {
+            internalTimer.scheduleRepeating(deadline: .now() + interval, interval: interval)
+        }
+    }
 }
 
 //MARK: Throttle
-extension SwiftTimer {
+public extension SwiftTimer {
+    
     private static var timers = [String:DispatchSourceTimer]()
     
-    //提供identifier的原因是标记不同的handler,因为闭包不能做equal比较所以我们只能自己提供标记
-    //http://stackoverflow.com/questions/24111984/how-do-you-test-functions-and-closures-for-equality
-    static func throttle(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) {
+    public static func throttle(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) {
         
         if let previousTimer = timers[identifier] {
             previousTimer.cancel()
