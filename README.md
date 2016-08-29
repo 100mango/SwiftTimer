@@ -26,6 +26,20 @@ let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) {
 timer.start()
 ~~~
 
+dynamically changing interval
+
+~~~swift
+let timer = SwiftTimer.repeaticTimer(interval: .seconds(5)) { timer in
+	print("doSomething")
+}
+timer.start()  // print doSomething every 5 seconds
+
+func speedUp(timer: SwiftTimer) {
+	timer.rescheduleRepeating(interval: .seconds(1))
+}
+speedUp(timer) // print doSomething every 1 second 
+~~~
+
 ###throttle
 
 ~~~swift
