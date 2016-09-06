@@ -47,6 +47,25 @@ class SwiftTimer_iOSTests: XCTestCase {
         self.waitForExpectations(timeout: 2.01, handler: nil)
     }
     
+    func testTimerAndInternalTimerRetainCycle() {
+        
+        let expectation = self.expectation(description: "test deinit")
+        var count = 0
+        do {
+            let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) { _ in
+                count += 1
+                print(count)
+            }
+            timer.start()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2 ) {
+            if count == 0 {
+                expectation.fulfill()
+            }
+        }
+        self.waitForExpectations(timeout: 2, handler: nil)
+    }
+    
     func testThrottle() {
         
         let expectation = self.expectation(description: "throttle")

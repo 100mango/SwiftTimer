@@ -23,8 +23,10 @@ public class SwiftTimer {
         self.handler = handler
         self.repeats = repeats
         internalTimer = DispatchSource.makeTimerSource(queue: queue)
-        internalTimer.setEventHandler {
-            handler(self)
+        internalTimer.setEventHandler { [weak self] in
+            if let strongSelf = self {
+                handler(strongSelf)
+            }
         }
         
         if repeats {
