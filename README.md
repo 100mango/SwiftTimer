@@ -16,7 +16,7 @@ Simple and Elegant Timer
 ##Usage
 
 
-###singleTimer
+###single timer
 
 ~~~swift
 let timer = SwiftTimer(interval: .seconds(2)) {
@@ -25,7 +25,7 @@ let timer = SwiftTimer(interval: .seconds(2)) {
 timer.start()
 ~~~
 
-###repeaticTimer
+###repeatic timer
 
 ~~~swift
 let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) {
@@ -54,4 +54,13 @@ speedUp(timer) // print doSomething every 1 second
 SwiftTimer.throttle(interval: .seconds(0.5), identifier: "throttle") {
 	search(inputText)
 }
+~~~
+
+###count down timer
+
+~~~swift
+let timer = SwiftCountDownTimer(interval: .fromSeconds(0.1), times: 10) { timer , leftTimes in
+    label.text = "\(leftTimes)"
+}
+timer.start()
 ~~~
