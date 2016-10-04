@@ -16,9 +16,11 @@ public class SwiftTimer {
     
     public let repeats: Bool
     
-    private let handler: (SwiftTimer) -> Void
+    public typealias SwiftTimerHandler = (SwiftTimer) -> Void
     
-    public init(interval: DispatchTimeInterval, repeats: Bool = false, queue: DispatchQueue = .main , handler: @escaping (SwiftTimer) -> Void) {
+    private var handler: SwiftTimerHandler
+    
+    public init(interval: DispatchTimeInterval, repeats: Bool = false, queue: DispatchQueue = .main , handler: @escaping SwiftTimerHandler) {
         
         self.handler = handler
         self.repeats = repeats
@@ -36,7 +38,7 @@ public class SwiftTimer {
         }
     }
     
-    public static func repeaticTimer(interval: DispatchTimeInterval, queue: DispatchQueue = .main , handler: @escaping (SwiftTimer) -> Void) -> SwiftTimer {
+    public static func repeaticTimer(interval: DispatchTimeInterval, queue: DispatchQueue = .main , handler: @escaping SwiftTimerHandler ) -> SwiftTimer {
         return SwiftTimer(interval: interval, repeats: true, queue: queue, handler: handler)
     }
     
@@ -73,6 +75,16 @@ public class SwiftTimer {
             internalTimer.scheduleRepeating(deadline: .now() + interval, interval: interval)
         }
     }
+    
+    public func rescheduleHandler(handler: @escaping SwiftTimerHandler) {
+        self.handler = handler
+        internalTimer.setEventHandler { [weak self] in
+            if let strongSelf = self {
+                handler(strongSelf)
+            }
+        }
+
+    }
 }
 
 //MARK: Throttle
@@ -96,6 +108,50 @@ public extension SwiftTimer {
         timer.resume()
         timers[identifier] = timer
     }
+}
+
+//MARK: Count Down
+public class SwiftCountDownTimer {
+    
+    private let internalTimer: SwiftTimer
+    
+    private var leftTimes: Int
+    
+    private let originalTimes: Int
+    
+    private let handler: (SwiftCountDownTimer, _ leftTimes: Int) -> Void
+    
+    public init(interval: DispatchTimeInterval, times: Int,queue: DispatchQueue = .main , handler:  @escaping (SwiftCountDownTimer, _ leftTimes: Int) -> Void ) {
+        
+        self.leftTimes = times
+        self.originalTimes = times
+        self.handler = handler
+        self.internalTimer = SwiftTimer.repeaticTimer(interval: interval, queue: queue, handler: { _ in
+        })
+        self.internalTimer.rescheduleHandler { [weak self]  swiftTimer in
+            if let strongSelf = self {
+                if strongSelf.leftTimes > 0 {
+                    strongSelf.leftTimes = strongSelf.leftTimes - 1
+                    strongSelf.handler(strongSelf, strongSelf.leftTimes)
+                } else {
+                    strongSelf.internalTimer.suspend()
+                }
+            }
+        }
+    }
+    
+    public func start() {
+        self.internalTimer.start()
+    }
+    
+    public func suspend() {
+        self.internalTimer.suspend()
+    }
+    
+    public func reCountDown() {
+        self.leftTimes = self.originalTimes
+    }
+    
 }
 
 public extension DispatchTimeInterval {

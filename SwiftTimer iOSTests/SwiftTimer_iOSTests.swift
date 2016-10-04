@@ -49,26 +49,23 @@ class SwiftTimer_iOSTests: XCTestCase {
     
     func testTimerAndInternalTimerRetainCycle() {
         
-        let expectation = self.expectation(description: "test deinit")
+        //let expectation = self.expectation(description: "test deinit")
         var count = 0
+        weak var weakReference: SwiftTimer?
         do {
             let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) { _ in
                 count += 1
                 print(count)
             }
+            weakReference = timer
             timer.start()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2 ) {
-            if count == 0 {
-                expectation.fulfill()
-            }
-        }
-        self.waitForExpectations(timeout: 2, handler: nil)
+        XCTAssertNil(weakReference)
     }
     
     func testThrottle() {
         
-        let expectation = self.expectation(description: "throttle")
+        let expectation = self.expectation(description: "test throttle")
         
         var count = 0
         let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) { _ in
@@ -106,5 +103,38 @@ class SwiftTimer_iOSTests: XCTestCase {
         }
         timer.start()
         self.waitForExpectations(timeout: 6.1, handler: nil)
+    }
+    
+    func testRescheduleHandler() {
+        
+        let expectation = self.expectation(description: "RescheduleHandler")
+        
+        let timer = SwiftTimer(interval: .seconds(2)) { _ in
+            print("should not pass")
+        }
+        timer.rescheduleHandler { _ in
+            expectation.fulfill()
+        }
+        timer.start()
+        self.waitForExpectations(timeout: 2, handler: nil)
+    }
+    
+    func testCountDownTimer() {
+        
+        let expectation = self.expectation(description: "test count down timer")
+        
+        let label = UILabel()
+        
+        let timer = SwiftCountDownTimer(interval: .fromSeconds(0.1), times: 10) { _, leftTimes in
+            label.text = "\(leftTimes)"
+            print(label.text)
+            if label.text == "0" {
+                expectation.fulfill()
+            }
+        }
+        timer.start()
+        
+        self.waitForExpectations(timeout: 1.01, handler: nil)
+        
     }
 }
