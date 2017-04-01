@@ -6,17 +6,17 @@ Simple and Elegant Timer
 
 中文介绍：[打造一个优雅的Timer](https://github.com/100mango/zen/blob/master/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E4%BC%98%E9%9B%85%E7%9A%84Timer/make%20a%20timer.md)
 
-##Compare with NSTimer
+## Compare with NSTimer
 - No retain cycle
 - Decouple with RunLoop 
 - Support GCD queue
 - Support dynamically changing interval
 - Support closure syntax
 
-##Usage
+## Usage
 
 
-###single timer
+### single timer
 
 ~~~swift
 let timer = SwiftTimer(interval: .seconds(2)) {
@@ -25,7 +25,7 @@ let timer = SwiftTimer(interval: .seconds(2)) {
 timer.start()
 ~~~
 
-###repeatic timer
+### repeatic timer
 
 ~~~swift
 let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) {
@@ -48,7 +48,7 @@ func speedUp(timer: SwiftTimer) {
 speedUp(timer) // print doSomething every 1 second 
 ~~~
 
-###throttle
+### throttle
 
 ~~~swift
 SwiftTimer.throttle(interval: .seconds(0.5), identifier: "throttle") {
@@ -56,7 +56,7 @@ SwiftTimer.throttle(interval: .seconds(0.5), identifier: "throttle") {
 }
 ~~~
 
-###count down timer
+### count down timer
 
 ~~~swift
 let timer = SwiftCountDownTimer(interval: .fromSeconds(0.1), times: 10) { timer , leftTimes in
