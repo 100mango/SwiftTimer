@@ -159,6 +159,6 @@ public class SwiftCountDownTimer {
 public extension DispatchTimeInterval {
     
     public static func fromSeconds(_ seconds: Double) -> DispatchTimeInterval {
-        return .nanoseconds(Int(seconds * Double(NSEC_PER_SEC)))
+        return .milliseconds(Int(seconds * 1000))
     }
 }
