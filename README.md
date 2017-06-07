@@ -64,3 +64,13 @@ let timer = SwiftCountDownTimer(interval: .fromSeconds(0.1), times: 10) { timer 
 }
 timer.start()
 ~~~
+
+
+
+## Installation
+
+Carthage:
+
+~~~
+github "100mango/SwiftTimer"
+~~~
