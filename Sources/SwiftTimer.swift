@@ -94,13 +94,15 @@ public extension SwiftTimer {
     
     private static var timers = [String:DispatchSourceTimer]()
     
-    @discardableResult public static func throttle(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) -> DispatchSourceTimer {
+    public static func throttle(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) {
         
         if let previousTimer = timers[identifier] {
             previousTimer.cancel()
+            timers.removeValue(forKey: identifier)
         }
         
         let timer = DispatchSource.makeTimerSource(queue: queue)
+        timers[identifier] = timer
         timer.scheduleOneshot(deadline: .now() + interval)
         timer.setEventHandler {
             handler()
@@ -108,9 +110,16 @@ public extension SwiftTimer {
             timers.removeValue(forKey: identifier)
         }
         timer.resume()
-        timers[identifier] = timer
-        return timer
     }
+    
+    public static func cancelThrottlingTimer(identifier: String) {
+        if let previousTimer = timers[identifier] {
+            previousTimer.cancel()
+            timers.removeValue(forKey: identifier)
+        }
+    }
+    
+    
     
 }
 
