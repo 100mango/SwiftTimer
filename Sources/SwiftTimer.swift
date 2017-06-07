@@ -94,7 +94,7 @@ public extension SwiftTimer {
     
     private static var timers = [String:DispatchSourceTimer]()
     
-    public static func throttle(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) {
+    @discardableResult public static func throttle(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) -> DispatchSourceTimer {
         
         if let previousTimer = timers[identifier] {
             previousTimer.cancel()
@@ -109,7 +109,9 @@ public extension SwiftTimer {
         }
         timer.resume()
         timers[identifier] = timer
+        return timer
     }
+    
 }
 
 //MARK: Count Down
