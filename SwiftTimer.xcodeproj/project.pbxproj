@@ -18,6 +18,10 @@
 		BF84D1C91D6C106E00B5B511 /* SwiftTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF84D1B71D6C0D6800B5B511 /* SwiftTimer.swift */; };
 		BF84D1CA1D6C106F00B5B511 /* SwiftTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF84D1B71D6C0D6800B5B511 /* SwiftTimer.swift */; };
 		BF84D1CB1D6C10E600B5B511 /* SwiftTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF84D1B71D6C0D6800B5B511 /* SwiftTimer.swift */; };
+		C93084F41EEA7F0600132A7C /* SwiftTimer.swift in Headers */ = {isa = PBXBuildFile; fileRef = BF84D1B71D6C0D6800B5B511 /* SwiftTimer.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		C93084F51EEA7FED00132A7C /* SwiftTimer.swift in Headers */ = {isa = PBXBuildFile; fileRef = BF84D1B71D6C0D6800B5B511 /* SwiftTimer.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		C93084F61EEA800100132A7C /* SwiftTimer.swift in Headers */ = {isa = PBXBuildFile; fileRef = BF84D1B71D6C0D6800B5B511 /* SwiftTimer.swift */; settings = {ATTRIBUTES = (Public, ); }; };
+		C93084F71EEA800A00132A7C /* SwiftTimer.swift in Headers */ = {isa = PBXBuildFile; fileRef = BF84D1B71D6C0D6800B5B511 /* SwiftTimer.swift */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -137,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF84D16E1D6C016500B5B511 /* SwiftTimer.h in Headers */,
+				C93084F41EEA7F0600132A7C /* SwiftTimer.swift in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF84D1B31D6C0D0100B5B511 /* SwiftTimer.h in Headers */,
+				C93084F51EEA7FED00132A7C /* SwiftTimer.swift in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -153,6 +159,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF84D1B51D6C0D0400B5B511 /* SwiftTimer.h in Headers */,
+				C93084F61EEA800100132A7C /* SwiftTimer.swift in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,6 +168,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF84D1B61D6C0D0400B5B511 /* SwiftTimer.h in Headers */,
+				C93084F71EEA800A00132A7C /* SwiftTimer.swift in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1024,6 +1032,7 @@
 				BF84D1711D6C016500B5B511 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF84D17C1D6C01A600B5B511 /* Build configuration list for PBXNativeTarget "SwiftTimer watchOS" */ = {
 			isa = XCConfigurationList;
@@ -1032,6 +1041,7 @@
 				BF84D17E1D6C01A600B5B511 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF84D1891D6C01C000B5B511 /* Build configuration list for PBXNativeTarget "SwiftTimer tvOS" */ = {
 			isa = XCConfigurationList;
@@ -1040,6 +1050,7 @@
 				BF84D18B1D6C01C000B5B511 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF84D1961D6C01DD00B5B511 /* Build configuration list for PBXNativeTarget "SwiftTimer macOS" */ = {
 			isa = XCConfigurationList;
@@ -1048,6 +1059,7 @@
 				BF84D1981D6C01DD00B5B511 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF84D1C51D6C0F1600B5B511 /* Build configuration list for PBXNativeTarget "SwiftTimer iOSTests" */ = {
 			isa = XCConfigurationList;
@@ -1056,6 +1068,7 @@
 				BF84D1C71D6C0F1600B5B511 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
