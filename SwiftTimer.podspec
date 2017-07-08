@@ -10,6 +10,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.0"
   s.source       = { :git => "https://github.com/anotheren/SwiftTimer.git",
                      :tag => s.version }
-  s.source_files = "Source/*.swift"
+  s.source_files = "Sources/*.swift"
 
 end
