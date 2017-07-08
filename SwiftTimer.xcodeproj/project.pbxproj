@@ -1024,6 +1024,7 @@
 				BF84D1711D6C016500B5B511 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF84D17C1D6C01A600B5B511 /* Build configuration list for PBXNativeTarget "SwiftTimer watchOS" */ = {
 			isa = XCConfigurationList;
@@ -1032,6 +1033,7 @@
 				BF84D17E1D6C01A600B5B511 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF84D1891D6C01C000B5B511 /* Build configuration list for PBXNativeTarget "SwiftTimer tvOS" */ = {
 			isa = XCConfigurationList;
@@ -1040,6 +1042,7 @@
 				BF84D18B1D6C01C000B5B511 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF84D1961D6C01DD00B5B511 /* Build configuration list for PBXNativeTarget "SwiftTimer macOS" */ = {
 			isa = XCConfigurationList;
@@ -1048,6 +1051,7 @@
 				BF84D1981D6C01DD00B5B511 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		BF84D1C51D6C0F1600B5B511 /* Build configuration list for PBXNativeTarget "SwiftTimer iOSTests" */ = {
 			isa = XCConfigurationList;
@@ -1056,6 +1060,7 @@
 				BF84D1C71D6C0F1600B5B511 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
