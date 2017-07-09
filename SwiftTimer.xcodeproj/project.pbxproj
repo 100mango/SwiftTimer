@@ -31,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A0B1A44B1F11E2B700677CDB /* SwiftTimer.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftTimer.podspec; sourceTree = "<group>"; };
 		BF84D1691D6C016500B5B511 /* SwiftTimer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftTimer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF84D16C1D6C016500B5B511 /* SwiftTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SwiftTimer.h; path = Sources/SwiftTimer.h; sourceTree = "<group>"; };
 		BF84D1771D6C01A600B5B511 /* SwiftTimer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftTimer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -89,6 +90,7 @@
 		BF84D15D1D6C010700B5B511 = {
 			isa = PBXGroup;
 			children = (
+				A0B1A44B1F11E2B700677CDB /* SwiftTimer.podspec */,
 				BF84D1AF1D6C033000B5B511 /* Sources */,
 				BF84D1BE1D6C0F1600B5B511 /* SwiftTimer iOSTests */,
 				BF84D16A1D6C016500B5B511 /* Products */,
