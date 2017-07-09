@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "0830"
-   version = "1.3">
+   version = "1.8">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BF84D1761D6C01A600B5B511"
+               BlueprintIdentifier = "BF84D1901D6C01DD00B5B511"
                BuildableName = "SwiftTimer.framework"
-               BlueprintName = "SwiftTimer watchOS"
+               BlueprintName = "SwiftTimer macOS"
                ReferencedContainer = "container:SwiftTimer.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -26,6 +26,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
@@ -45,9 +46,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "BF84D1761D6C01A600B5B511"
+            BlueprintIdentifier = "BF84D1901D6C01DD00B5B511"
             BuildableName = "SwiftTimer.framework"
-            BlueprintName = "SwiftTimer watchOS"
+            BlueprintName = "SwiftTimer macOS"
             ReferencedContainer = "container:SwiftTimer.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +64,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "BF84D1761D6C01A600B5B511"
+            BlueprintIdentifier = "BF84D1901D6C01DD00B5B511"
             BuildableName = "SwiftTimer.framework"
-            BlueprintName = "SwiftTimer watchOS"
+            BlueprintName = "SwiftTimer macOS"
             ReferencedContainer = "container:SwiftTimer.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
