@@ -69,6 +69,12 @@ timer.start()
 
 ## Installation
 
+CococaPods:
+
+```
+pod 'SwiftTimer', '~> 1.0.3'
+```
+
 Carthage:
 
 ~~~
