@@ -1,6 +1,6 @@
 ![](logo.png)
 
-[![](http://img.shields.io/badge/Swift-3-blue.svg)]()    ![platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20OSX%20%7C%20tvOS%20%7C%20watchOS%20-333333.svg) 
+[![](http://img.shields.io/badge/Swift-4-blue.svg)]()    ![platforms](https://img.shields.io/badge/platforms-iOS%20%7C%20OSX%20%7C%20tvOS%20%7C%20watchOS%20-333333.svg) 
 
 Simple and Elegant Timer
 
