@@ -127,7 +127,7 @@ class SwiftTimer_iOSTests: XCTestCase {
         
         let timer = SwiftCountDownTimer(interval: .fromSeconds(0.1), times: 10) { _, leftTimes in
             label.text = "\(leftTimes)"
-            print(label.text)
+            print(label.text!)
             if label.text == "0" {
                 expectation.fulfill()
             }
