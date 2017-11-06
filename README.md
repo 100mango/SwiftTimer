@@ -72,7 +72,7 @@ timer.start()
 CococaPods:
 
 ```
-pod 'SwiftTimer', '~> 1.0.3'
+pod 'SwiftTimer', '~> 2.0'
 ```
 
 Carthage:
