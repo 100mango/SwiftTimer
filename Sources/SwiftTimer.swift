@@ -32,9 +32,9 @@ public class SwiftTimer {
         }
         
         if repeats {
-            internalTimer.scheduleRepeating(deadline: .now() + interval, interval: interval)
+            internalTimer.schedule(deadline: .now() + interval, repeating: interval)
         } else {
-            internalTimer.scheduleOneshot(deadline: .now() + interval)
+            internalTimer.schedule(deadline: .now() + interval)
         }
     }
     
@@ -74,7 +74,7 @@ public class SwiftTimer {
     
     public func rescheduleRepeating(interval: DispatchTimeInterval) {
         if repeats {
-            internalTimer.scheduleRepeating(deadline: .now() + interval, interval: interval)
+            internalTimer.schedule(deadline: .now() + interval, repeating: interval)
         }
     }
     
@@ -103,7 +103,7 @@ public extension SwiftTimer {
         
         let timer = DispatchSource.makeTimerSource(queue: queue)
         timers[identifier] = timer
-        timer.scheduleOneshot(deadline: .now() + interval)
+        timer.schedule(deadline: .now() + interval)
         timer.setEventHandler {
             handler()
             timer.cancel()
