@@ -20,7 +20,7 @@ public class SwiftTimer {
     
     private var handler: SwiftTimerHandler
     
-    public init(interval: DispatchTimeInterval, repeats: Bool = false, queue: DispatchQueue = .main , handler: @escaping SwiftTimerHandler) {
+    public init(interval: DispatchTimeInterval, repeats: Bool = false, leeway: DispatchTimeInterval = .seconds(0), queue: DispatchQueue = .main , handler: @escaping SwiftTimerHandler) {
         
         self.handler = handler
         self.repeats = repeats
@@ -32,14 +32,14 @@ public class SwiftTimer {
         }
         
         if repeats {
-            internalTimer.schedule(deadline: .now() + interval, repeating: interval)
+            internalTimer.schedule(deadline: .now() + interval, repeating: interval, leeway: leeway)
         } else {
-            internalTimer.schedule(deadline: .now() + interval)
+            internalTimer.schedule(deadline: .now() + interval, leeway: leeway)
         }
     }
     
-    public static func repeaticTimer(interval: DispatchTimeInterval, queue: DispatchQueue = .main , handler: @escaping SwiftTimerHandler ) -> SwiftTimer {
-        return SwiftTimer(interval: interval, repeats: true, queue: queue, handler: handler)
+    public static func repeaticTimer(interval: DispatchTimeInterval, leeway: DispatchTimeInterval = .seconds(0), queue: DispatchQueue = .main , handler: @escaping SwiftTimerHandler ) -> SwiftTimer {
+        return SwiftTimer(interval: interval, repeats: true, leeway: leeway, queue: queue, handler: handler)
     }
     
     deinit {
