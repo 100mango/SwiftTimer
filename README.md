@@ -19,16 +19,17 @@ Simple and Elegant Timer
 ### single timer
 
 ~~~swift
-let timer = SwiftTimer(interval: .seconds(2)) {
+//We need to maintain a strong reference to SwiftTimer. When self dealloc, timer will dealloc too. 
+self.timer = SwiftTimer(interval: .seconds(2)) {
     print("fire")
 }
-timer.start()
+self.timer.start()
 ~~~
 
 ### repeatic timer
 
 ~~~swift
-let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) {
+timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) {
     print("fire")
 }
 timer.start()
@@ -37,7 +38,7 @@ timer.start()
 dynamically changing interval
 
 ~~~swift
-let timer = SwiftTimer.repeaticTimer(interval: .seconds(5)) { timer in
+timer = SwiftTimer.repeaticTimer(interval: .seconds(5)) { timer in
 	print("doSomething")
 }
 timer.start()  // print doSomething every 5 seconds
@@ -59,7 +60,7 @@ SwiftTimer.throttle(interval: .seconds(0.5), identifier: "throttle") {
 ### count down timer
 
 ~~~swift
-let timer = SwiftCountDownTimer(interval: .fromSeconds(0.1), times: 10) { timer , leftTimes in
+timer = SwiftCountDownTimer(interval: .fromSeconds(0.1), times: 10) { timer , leftTimes in
     label.text = "\(leftTimes)"
 }
 timer.start()
