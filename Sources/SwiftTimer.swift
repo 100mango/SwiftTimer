@@ -92,30 +92,47 @@ public class SwiftTimer {
 //MARK: Throttle
 public extension SwiftTimer {
     
-    private static var timers = [String:DispatchSourceTimer]()
+    private static var workItems = [String:DispatchWorkItem]()
     
+    ///The Handler will be called after interval you specified
+    ///Calling again in the interval cancels the previous call
+    public static func debounce(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) {
+        
+        //if already exist
+        if let item = workItems[identifier] {
+            item.cancel()
+        }
+
+        let item = DispatchWorkItem {
+            handler();
+            workItems.removeValue(forKey: identifier)
+        };
+        workItems[identifier] = item
+        queue.asyncAfter(deadline: .now() + interval, execute: item);
+    }
+    
+    ///The Handler will be called after interval you specified
+    ///It is invalid to call again in the interval
     public static func throttle(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) {
         
-        if let previousTimer = timers[identifier] {
-            previousTimer.cancel()
-            timers.removeValue(forKey: identifier)
+        //if already exist
+        if workItems[identifier] != nil {
+            return;
         }
         
-        let timer = DispatchSource.makeTimerSource(queue: queue)
-        timers[identifier] = timer
-        timer.schedule(deadline: .now() + interval)
-        timer.setEventHandler {
-            handler()
-            timer.cancel()
-            timers.removeValue(forKey: identifier)
-        }
-        timer.resume()
+        let item = DispatchWorkItem {
+            handler();
+            workItems.removeValue(forKey: identifier)
+        };
+        workItems[identifier] = item
+        queue.asyncAfter(deadline: .now() + interval, execute: item);
+        
     }
     
     public static func cancelThrottlingTimer(identifier: String) {
-        if let previousTimer = timers[identifier] {
-            previousTimer.cancel()
-            timers.removeValue(forKey: identifier)
+        if let item = workItems[identifier] {
+            item.cancel()
+            workItems.removeValue(forKey: identifier)
         }
     }
     

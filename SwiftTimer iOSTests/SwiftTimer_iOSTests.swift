@@ -63,19 +63,23 @@ class SwiftTimer_iOSTests: XCTestCase {
         XCTAssertNil(weakReference)
     }
     
-    func testThrottle() {
+    func testDebounce() {
         
-        let expectation = self.expectation(description: "test throttle")
+        let expectation = self.expectation(description: "test debounce")
         
         var count = 0
         let timer = SwiftTimer.repeaticTimer(interval: .seconds(1)) { _ in
             
-            SwiftTimer.throttle(interval: .fromSeconds(1.5), identifier: "not pass") {
-                XCTFail("should not pass")
-                expectation.fulfill()
+            SwiftTimer.debounce(interval: .fromSeconds(1.5), identifier: "not pass") { [weak expectation] in
+                //even testDebounce success. the internal timer won't stop.
+                //it will cause another test method fail
+                //I think XCTest framework should not call fail if XCFail is not in other test method
+                if (expectation != nil) {
+                    XCTFail("should not pass")
+                }
             }
             
-            SwiftTimer.throttle(interval: .fromSeconds(0.5), identifier:  "pass") {
+            SwiftTimer.debounce(interval: .fromSeconds(0.5), identifier:  "pass") {
                 count = count + 1
                 if count == 4 {
                     expectation.fulfill()
@@ -84,6 +88,30 @@ class SwiftTimer_iOSTests: XCTestCase {
         }
         timer.start()
         self.waitForExpectations(timeout: 5, handler: nil)
+    }
+    
+    func testThrottle() {
+        
+        let expectation = self.expectation(description: "test throttle")
+        
+        var count = 0
+        var temp = 0
+        let timer = SwiftTimer.repeaticTimer(interval: .fromSeconds(0.1)) { _ in
+            SwiftTimer.throttle(interval: .fromSeconds(1), identifier: "throttle", handler: {
+                count = count + 1
+                if count > 3 {
+                    XCTFail("should not pass")
+                }
+                print(count)
+            })
+            temp = temp + 1
+            print("temp: \(temp)")
+            if temp == 30 {
+                expectation.fulfill()
+            }
+        }
+        timer.start()
+        self.waitForExpectations(timeout: 3.2, handler: nil)
     }
     
     func testRescheduleRepeating() {
