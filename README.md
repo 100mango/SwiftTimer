@@ -51,11 +51,25 @@ speedUp(timer) // print doSomething every 1 second
 
 ### throttle
 
+The closure will be called after interval you specified. It is invalid to call again in the interval.
+
 ~~~swift
-SwiftTimer.throttle(interval: .seconds(0.5), identifier: "throttle") {
+SwiftTimer.throttle(interval: .seconds(0.5), identifier: "refresh") {
+	refresh();
+}
+~~~
+
+
+### debounce
+
+The closure will be called after interval you specified. Calling again in the interval cancels the previous call.
+
+~~~swift
+SwiftTimer.debounce(interval: .seconds(0.5), identifier: "search") {
 	search(inputText)
 }
 ~~~
+
 
 ### count down timer
 
