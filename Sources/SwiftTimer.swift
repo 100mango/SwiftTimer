@@ -25,10 +25,8 @@ public class SwiftTimer {
         self.handler = handler
         self.repeats = repeats
         internalTimer = DispatchSource.makeTimerSource(queue: queue)
-        internalTimer.setEventHandler { [weak self] in
-            if let strongSelf = self {
-                handler(strongSelf)
-            }
+        internalTimer.setEventHandler {
+            handler(self)
         }
         
         if repeats {
@@ -80,12 +78,10 @@ public class SwiftTimer {
     
     public func rescheduleHandler(handler: @escaping SwiftTimerHandler) {
         self.handler = handler
-        internalTimer.setEventHandler { [weak self] in
-            if let strongSelf = self {
-                handler(strongSelf)
-            }
+        internalTimer.setEventHandler {
+            handler(self)
         }
-
+        
     }
 }
 
@@ -102,7 +98,7 @@ public extension SwiftTimer {
         if let item = workItems[identifier] {
             item.cancel()
         }
-
+        
         let item = DispatchWorkItem {
             handler();
             workItems.removeValue(forKey: identifier)
@@ -158,14 +154,12 @@ public class SwiftCountDownTimer {
         self.handler = handler
         self.internalTimer = SwiftTimer.repeaticTimer(interval: interval, queue: queue, handler: { _ in
         })
-        self.internalTimer.rescheduleHandler { [weak self]  swiftTimer in
-            if let strongSelf = self {
-                if strongSelf.leftTimes > 0 {
-                    strongSelf.leftTimes = strongSelf.leftTimes - 1
-                    strongSelf.handler(strongSelf, strongSelf.leftTimes)
-                } else {
-                    strongSelf.internalTimer.suspend()
-                }
+        self.internalTimer.rescheduleHandler { (swiftzTimer) in
+            if self.leftTimes > 0 {
+                self.leftTimes = self.leftTimes - 1
+                self.handler(self, self.leftTimes)
+            } else {
+                self.internalTimer.suspend()
             }
         }
     }
