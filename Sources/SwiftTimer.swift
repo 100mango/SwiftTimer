@@ -154,7 +154,7 @@ public class SwiftCountDownTimer {
         self.handler = handler
         self.internalTimer = SwiftTimer.repeaticTimer(interval: interval, queue: queue, handler: { _ in
         })
-        self.internalTimer.rescheduleHandler { (swiftzTimer) in
+        self.internalTimer.rescheduleHandler { (swiftTimer) in
             if self.leftTimes > 0 {
                 self.leftTimes = self.leftTimes - 1
                 self.handler(self, self.leftTimes)
