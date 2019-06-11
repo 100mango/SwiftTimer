@@ -96,7 +96,7 @@ public extension SwiftTimer {
     
     ///The Handler will be called after interval you specified
     ///Calling again in the interval cancels the previous call
-    public static func debounce(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) {
+    static func debounce(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) {
         
         //if already exist
         if let item = workItems[identifier] {
@@ -113,7 +113,7 @@ public extension SwiftTimer {
     
     ///The Handler will be called after interval you specified
     ///It is invalid to call again in the interval
-    public static func throttle(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) {
+    static func throttle(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) {
         
         //if already exist
         if workItems[identifier] != nil {
@@ -129,7 +129,7 @@ public extension SwiftTimer {
         
     }
     
-    public static func cancelThrottlingTimer(identifier: String) {
+    static func cancelThrottlingTimer(identifier: String) {
         if let item = workItems[identifier] {
             item.cancel()
             workItems.removeValue(forKey: identifier)
@@ -186,7 +186,7 @@ public class SwiftCountDownTimer {
 
 public extension DispatchTimeInterval {
     
-    public static func fromSeconds(_ seconds: Double) -> DispatchTimeInterval {
+    static func fromSeconds(_ seconds: Double) -> DispatchTimeInterval {
         return .milliseconds(Int(seconds * 1000))
     }
 }
