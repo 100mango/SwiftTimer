@@ -165,4 +165,25 @@ class SwiftTimer_iOSTests: XCTestCase {
         self.waitForExpectations(timeout: 1.01, handler: nil)
         
     }
+    
+    func testTimerQueue() {
+        
+        let expectation = self.expectation(description: "test timer queue")
+        
+        let label = UILabel()
+        
+        let timer = SwiftTimerQueue.init(interval: .seconds(1))
+        for i in 0..<50{
+            timer.addQueue {
+                label.text = "\(i)"
+            }
+        }
+        timer.addQueue {
+            expectation.fulfill()
+        }
+        timer.start()
+        
+        self.waitForExpectations(timeout: 51, handler: nil)
+        
+    }
 }

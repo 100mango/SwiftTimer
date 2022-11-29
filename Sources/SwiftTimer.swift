@@ -190,3 +190,56 @@ public extension DispatchTimeInterval {
         return .milliseconds(Int(seconds * 1000))
     }
 }
+
+
+public class SwiftTimerQueue {
+    
+    private let internalTimer: SwiftTimer
+    private var workQueue:[DispatchWorkItem]
+    
+
+    ///The Handler will be called after interval you specified
+    ///Calling again in the interval cancels the previous call
+    public init(interval: DispatchTimeInterval, queue: DispatchQueue = .main) {
+        self.workQueue = []
+        self.internalTimer = SwiftTimer.init(interval: interval, repeats: true, queue: queue) { _ in
+        }
+        self.internalTimer.rescheduleHandler {[weak self] swiftTimer in
+            if let strongSelf = self,let command = strongSelf.workQueue.first,!command.isCancelled {
+                queue.async(execute: command)
+            }
+        }
+    }
+    
+    func addQueue(_ handler: @escaping () -> Void ) {
+        let item = DispatchWorkItem {[weak self] in
+            guard let weak = self else{
+                return
+            }
+            if weak.workQueue.count > 0{
+                weak.workQueue.removeFirst()
+            }
+            handler();
+        };
+        workQueue.append(item)
+    }
+    
+    func clean() {
+        for item in workQueue{
+            item.cancel()
+        }
+        workQueue = []
+    }
+    
+    func flowCount()->Int {
+        return workQueue.count
+    }
+    
+    public func start() {
+        self.internalTimer.start()
+    }
+    
+    public func suspend() {
+        self.internalTimer.suspend()
+    }
+}

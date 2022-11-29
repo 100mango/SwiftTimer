@@ -80,6 +80,16 @@ timer = SwiftCountDownTimer(interval: .fromSeconds(0.1), times: 10) { timer , le
 timer.start()
 ~~~
 
+### timer queue
+
+~~~swift
+timer = SwiftTimerQueue.init(interval: . seconds(1))
+for i in 0..<50{
+    timer.addQueue {
+        label.text = "\(i)"
+    }
+}
+~~~
 
 
 ## Installation
