@@ -84,8 +84,49 @@ timer.start()
 
 ## Installation
 
-Carthage:
+### Swift Package Manager
+
+SwiftTimer can be added as a Swift Package Manager dependency with Swift 5.0 or later.
+The package exposes the `SwiftTimer` library and keeps the existing deployment targets:
+iOS 8, macOS 10.11, tvOS 10, and watchOS 3. Your Xcode version may require a newer
+deployment target. The package also builds on Linux using Foundation and Dispatch.
+
+In Xcode, choose **File > Add Package Dependencies**, enter
+`https://github.com/100mango/SwiftTimer.git`, and add the `SwiftTimer` product to your target.
+While this migration is under review, select the `swiftpm-support` branch.
+The `master` branch can be used only after this change is merged; the existing
+`v1.0` and `1.1` tags do not contain a package manifest. Once a version containing
+`Package.swift` is released, prefer that version for a stable dependency.
+
+For a `Package.swift` dependency:
+
+~~~swift
+dependencies: [
+    .package(url: "https://github.com/100mango/SwiftTimer.git", .branch("swiftpm-support"))
+],
+targets: [
+    .target(name: "YourTarget", dependencies: ["SwiftTimer"])
+]
+~~~
+
+Then use `import SwiftTimer` in your Swift files. The package compiles in Swift 5
+language mode, including when used with a Swift 6 toolchain.
+
+### Carthage
 
 ~~~
 github "100mango/SwiftTimer"
 ~~~
+
+## Testing
+
+Run the cross-platform package tests with a current Swift toolchain:
+
+~~~sh
+swift test
+swift test -c release
+~~~
+
+The package tests cover timers, countdowns, debounce, and throttle without UIKit.
+The existing Xcode project and its iOS tests remain available for Apple-platform
+validation; Linux package tests do not replace Apple SDK or device testing.
