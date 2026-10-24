@@ -84,8 +84,62 @@ timer.start()
 
 ## Installation
 
-Carthage:
+### Swift Package Manager
+
+SwiftTimer can be added as a Swift Package Manager dependency with Swift 5.0 or later.
+The package exposes the `SwiftTimer` library and keeps the existing deployment targets:
+iOS 8, macOS 10.11, tvOS 10, and watchOS 3. Your Xcode version may require a newer
+deployment target. The package also builds on Linux using Foundation and Dispatch.
+
+In Xcode, choose **File > Add Package Dependencies**, enter
+`https://github.com/100mango/SwiftTimer.git`, and add the `SwiftTimer` product to your target.
+Select **Up to Next Major Version** starting at **1.2.0**. Version 1.2.0 is the
+first release with a package manifest; the older `v1.0` and `1.1` tags do not
+support Swift Package Manager.
+
+For a `Package.swift` dependency:
+
+~~~swift
+dependencies: [
+    .package(url: "https://github.com/100mango/SwiftTimer.git", from: "1.2.0")
+],
+targets: [
+    .target(name: "YourTarget", dependencies: ["SwiftTimer"])
+]
+~~~
+
+Then use `import SwiftTimer` in your Swift files. The package compiles in Swift 5
+language mode, including when used with a Swift 6 toolchain.
+
+### Queue and cancellation behavior
+
+Use each timer instance from a single serial queue. `fire()` calls its handler
+synchronously on the caller's queue; scheduled events use the queue passed to the
+initializer. Keep a strong reference to a timer for as long as it is needed.
+
+Debounce and throttle registration and cancellation are safe to call concurrently.
+Identifiers share one registry across both operations. A pending throttle ignores
+the same identifier; debounce replaces any pending work with that identifier.
+The identifier becomes available before its handler runs, so handlers may schedule
+or cancel new work with the same identifier. Cancellation prevents pending work
+from starting; it does not interrupt a handler that has already started.
+
+### Carthage
 
 ~~~
 github "100mango/SwiftTimer"
 ~~~
+
+## Testing
+
+Run the cross-platform package tests with a current Swift toolchain:
+
+~~~sh
+swift test
+swift test -c release
+~~~
+
+The package tests cover timers, countdowns, debounce, and throttle without UIKit,
+including lifecycle, reentrant handlers, concurrent cancellation, and input boundaries.
+The existing Xcode project and its iOS tests remain available for Apple-platform
+validation; Linux package tests do not replace Apple SDK or device testing.
