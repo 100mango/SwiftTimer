@@ -93,52 +93,60 @@ public class SwiftTimer {
 //MARK: Throttle
 public extension SwiftTimer {
     
-    private static var workItems = [String:DispatchWorkItem]()
+    private static var workItems = [String: (item: DispatchWorkItem, token: UUID)]()
+    private static let workItemsLock = NSLock()
     
     ///The Handler will be called after interval you specified
     ///Calling again in the interval cancels the previous call
     static func debounce(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) {
         
-        //if already exist
-        if let item = workItems[identifier] {
-            item.cancel()
-        }
-
-        let item = DispatchWorkItem {
-            handler();
-            workItems.removeValue(forKey: identifier)
-        };
-        workItems[identifier] = item
-        queue.asyncAfter(deadline: .now() + interval, execute: item);
+        scheduleWork(interval: interval, identifier: identifier, queue: queue, replacing: true, handler: handler)
     }
     
     ///The Handler will be called after interval you specified
     ///It is invalid to call again in the interval
     static func throttle(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue = .main , handler: @escaping () -> Void ) {
         
-        //if already exist
-        if workItems[identifier] != nil {
-            return;
-        }
-        
-        let item = DispatchWorkItem {
-            handler();
-            workItems.removeValue(forKey: identifier)
-        };
-        workItems[identifier] = item
-        queue.asyncAfter(deadline: .now() + interval, execute: item);
-        
+        scheduleWork(interval: interval, identifier: identifier, queue: queue, replacing: false, handler: handler)
     }
     
     static func cancelThrottlingTimer(identifier: String) {
-        if let item = workItems[identifier] {
-            item.cancel()
-            workItems.removeValue(forKey: identifier)
-        }
+        workItemsLock.lock()
+        let pending = workItems.removeValue(forKey: identifier)
+        workItemsLock.unlock()
+        pending?.item.cancel()
     }
-    
-    
-    
+
+    private static func scheduleWork(interval: DispatchTimeInterval, identifier: String, queue: DispatchQueue, replacing: Bool, handler: @escaping () -> Void) {
+        workItemsLock.lock()
+        let previous = workItems[identifier]
+        if previous != nil && !replacing {
+            workItemsLock.unlock()
+            return
+        }
+
+        let token = UUID()
+        let item = DispatchWorkItem {
+            workItemsLock.lock()
+            guard workItems[identifier]?.token == token else {
+                workItemsLock.unlock()
+                return
+            }
+            // Remove only this generation before invoking user code. A handler may
+            // immediately schedule or cancel work with the same identifier.
+            let pending = workItems.removeValue(forKey: identifier)
+            workItemsLock.unlock()
+            withExtendedLifetime(pending) {
+                handler()
+            }
+        }
+        workItems[identifier] = (item, token)
+        workItemsLock.unlock()
+        // Keep replaced captures alive until after unlocking; their deinitializers
+        // may themselves register or cancel work.
+        previous?.item.cancel()
+        queue.asyncAfter(deadline: .now() + interval, execute: item)
+    }
 }
 
 //MARK: Count Down

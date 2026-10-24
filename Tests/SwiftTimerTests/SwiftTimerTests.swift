@@ -238,11 +238,285 @@ final class SwiftTimerTests: XCTestCase {
         }
     }
 
+    func testThrottleCanScheduleSameIdentifierFromItsHandler() {
+        let identifier = UUID().uuidString
+        defer { SwiftTimer.cancelThrottlingTimer(identifier: identifier) }
+        let completed = expectation(description: "Reentrant throttle fires three times")
+        var count = 0
+        func schedule() {
+            SwiftTimer.throttle(interval: .milliseconds(0), identifier: identifier) {
+                count += 1
+                if count < 3 {
+                    schedule()
+                } else {
+                    completed.fulfill()
+                }
+            }
+        }
+
+        schedule()
+        wait(for: [completed], timeout: 2)
+        XCTAssertEqual(count, 3)
+    }
+
+    func testReentrantDebounceRemainsCancellableAfterOriginalHandlerReturns() {
+        let identifier = UUID().uuidString
+        let queue = DispatchQueue(label: "SwiftTimerTests.reentrantDebounce")
+        queue.suspend()
+        let cancelled = expectation(description: "Replacement remains cancellable")
+        cancelled.isInverted = true
+        let drained = expectation(description: "Replacement queue runs")
+        SwiftTimer.debounce(interval: .milliseconds(0), identifier: identifier) {
+            SwiftTimer.debounce(interval: .milliseconds(0), identifier: identifier, queue: queue) {
+                cancelled.fulfill()
+            }
+            DispatchQueue.main.async {
+                SwiftTimer.cancelThrottlingTimer(identifier: identifier)
+                queue.resume()
+                queue.async { drained.fulfill() }
+            }
+        }
+
+        wait(for: [drained, cancelled], timeout: 0.2)
+        SwiftTimer.cancelThrottlingTimer(identifier: identifier)
+    }
+
+    func testConcurrentIdentifiersAndCancellationAreIndependent() {
+        let prefix = UUID().uuidString
+        let completed = expectation(description: "All uncancelled callbacks fire")
+        completed.expectedFulfillmentCount = 50
+        completed.assertForOverFulfill = true
+        var values = Set<Int>()
+
+        // Callbacks use the main queue, which cannot run until registration returns.
+        // This makes cancellation deterministic while registrations overlap on workers.
+        DispatchQueue.concurrentPerform(iterations: 100) { index in
+            let identifier = "\(prefix)-\(index)"
+            SwiftTimer.debounce(interval: .milliseconds(0), identifier: identifier) {
+                XCTAssertEqual(index % 2, 0)
+                values.insert(index)
+                completed.fulfill()
+            }
+            if index % 2 != 0 {
+                SwiftTimer.cancelThrottlingTimer(identifier: identifier)
+            }
+        }
+
+        wait(for: [completed], timeout: 2)
+        XCTAssertEqual(values, Set(stride(from: 0, to: 100, by: 2)))
+        for index in 0..<100 {
+            SwiftTimer.cancelThrottlingTimer(identifier: "\(prefix)-\(index)")
+        }
+    }
+
+    func testDebounceAndThrottleUseRequestedQueue() {
+        let queue = DispatchQueue(label: "SwiftTimerTests.workItems")
+        let key = DispatchSpecificKey<String>()
+        queue.setSpecific(key: key, value: "workItems")
+        let completed = expectation(description: "Callbacks use requested queue")
+        completed.expectedFulfillmentCount = 2
+        let handler = {
+            XCTAssertEqual(DispatchQueue.getSpecific(key: key), "workItems")
+            completed.fulfill()
+        }
+
+        SwiftTimer.debounce(interval: .milliseconds(0), identifier: UUID().uuidString, queue: queue, handler: handler)
+        SwiftTimer.throttle(interval: .milliseconds(0), identifier: UUID().uuidString, queue: queue, handler: handler)
+        wait(for: [completed], timeout: 2)
+    }
+
+    func testConcurrentDebounceWithSameIdentifierOnlyRunsLatestRegistration() {
+        assertConcurrentRegistrationsOnlyFireOnce(replacing: true)
+    }
+
+    func testConcurrentThrottleWithSameIdentifierOnlyRunsFirstRegistration() {
+        assertConcurrentRegistrationsOnlyFireOnce(replacing: false)
+    }
+
+    private func assertConcurrentRegistrationsOnlyFireOnce(replacing: Bool) {
+        let identifier = UUID().uuidString
+        let queue = DispatchQueue(label: "SwiftTimerTests.sameIdentifier")
+        queue.suspend()
+        let fired = expectation(description: "One registration wins")
+        fired.assertForOverFulfill = true
+        var count = 0
+        let selectedHandler = {
+            count += 1
+            fired.fulfill()
+        }
+        if !replacing {
+            SwiftTimer.throttle(interval: .milliseconds(0), identifier: identifier, queue: queue, handler: selectedHandler)
+        }
+        DispatchQueue.concurrentPerform(iterations: 64) { _ in
+            let handler = {
+                XCTFail("A superseded or throttled registration must not fire")
+            }
+            if replacing {
+                SwiftTimer.debounce(interval: .milliseconds(0), identifier: identifier, queue: queue, handler: handler)
+            } else {
+                SwiftTimer.throttle(interval: .milliseconds(0), identifier: identifier, queue: queue, handler: handler)
+            }
+        }
+        if replacing {
+            SwiftTimer.debounce(interval: .milliseconds(0), identifier: identifier, queue: queue, handler: selectedHandler)
+        }
+        queue.resume()
+        wait(for: [fired], timeout: 2)
+        queue.sync { XCTAssertEqual(count, 1) }
+        SwiftTimer.cancelThrottlingTimer(identifier: identifier)
+    }
+
+    func testRescheduleRepeatingDoesNotChangeSingleTimer() {
+        let completed = expectation(description: "Single timer keeps its deadline")
+        let timer = SwiftTimer(interval: .milliseconds(0)) { _ in completed.fulfill() }
+        timer.rescheduleRepeating(interval: .seconds(60))
+        timer.start()
+        wait(for: [completed], timeout: 2)
+        withExtendedLifetime(timer) {}
+    }
+
+    func testRepeatingTimerCanFireReentrantly() {
+        var count = 0
+        let timer = SwiftTimer.repeaticTimer(interval: .seconds(60)) { timer in
+            count += 1
+            if count < 3 {
+                timer.fire()
+            }
+        }
+
+        timer.fire()
+        XCTAssertEqual(count, 3)
+    }
+
+    func testTimerCanReleaseLastReferenceFromCallback() {
+        let completed = expectation(description: "Timer releases itself from callback")
+        var timer: SwiftTimer?
+        weak var reference: SwiftTimer?
+        timer = SwiftTimer.repeaticTimer(interval: .milliseconds(10)) { firingTimer in
+            firingTimer.suspend()
+            timer = nil
+            completed.fulfill()
+        }
+        reference = timer
+        timer?.start()
+
+        wait(for: [completed], timeout: 2)
+        XCTAssertNil(reference)
+    }
+
+    func testReplacingHandlerReleasesItsCapturedObject() {
+        let released = expectation(description: "Old handler releases its capture")
+        var timer: SwiftTimer?
+        do {
+            let probe = LifetimeProbe { released.fulfill() }
+            timer = SwiftTimer(interval: .seconds(60)) { [probe] _ in
+                withExtendedLifetime(probe) {}
+            }
+        }
+        timer?.rescheduleHandler { _ in }
+
+        wait(for: [released], timeout: 2)
+        withExtendedLifetime(timer) {}
+    }
+
+    func testNonPositiveCountdownNeverCallsHandler() {
+        let unexpected = expectation(description: "Nonpositive countdown stays silent")
+        unexpected.isInverted = true
+        let zero = SwiftCountDownTimer(interval: .milliseconds(0), times: 0) { _, _ in unexpected.fulfill() }
+        let negative = SwiftCountDownTimer(interval: .milliseconds(0), times: -1) { _, _ in unexpected.fulfill() }
+        zero.start()
+        negative.start()
+
+        wait(for: [unexpected], timeout: 0.1)
+        zero.suspend()
+        negative.suspend()
+        withExtendedLifetime((zero, negative)) {}
+    }
+
+    func testCountdownCanSuspendInHandlerAndResumeWithoutResetting() {
+        let paused = expectation(description: "Countdown pauses after first event")
+        let completed = expectation(description: "Countdown resumes from remaining count")
+        var values: [Int] = []
+        let timer = SwiftCountDownTimer(interval: .milliseconds(10), times: 3) { timer, remaining in
+            values.append(remaining)
+            if remaining == 2 {
+                timer.suspend()
+                paused.fulfill()
+            } else if remaining == 0 {
+                timer.suspend()
+                completed.fulfill()
+            }
+        }
+        timer.start()
+        wait(for: [paused], timeout: 2)
+        XCTAssertEqual(values, [2])
+        timer.start()
+        wait(for: [completed], timeout: 2)
+        XCTAssertEqual(values, [2, 1, 0])
+        withExtendedLifetime(timer) {}
+    }
+
+    func testCountdownCanResetFromItsCompletionHandler() {
+        let completed = expectation(description: "Countdown resets from callback")
+        var values: [Int] = []
+        let timer = SwiftCountDownTimer(interval: .milliseconds(10), times: 2) { timer, remaining in
+            values.append(remaining)
+            if values == [1, 0] {
+                timer.reCountDown()
+            } else if values == [1, 0, 1, 0] {
+                timer.suspend()
+                completed.fulfill()
+            }
+        }
+        timer.start()
+        wait(for: [completed], timeout: 2)
+        XCTAssertEqual(values, [1, 0, 1, 0])
+        withExtendedLifetime(timer) {}
+    }
+
+    func testCountdownCanReleaseLastReferenceFromCallback() {
+        let completed = expectation(description: "Countdown releases itself from callback")
+        var timer: SwiftCountDownTimer?
+        weak var reference: SwiftCountDownTimer?
+        timer = SwiftCountDownTimer(interval: .milliseconds(10), times: 1) { _, remaining in
+            XCTAssertEqual(remaining, 0)
+            timer = nil
+            completed.fulfill()
+        }
+        reference = timer
+        timer?.start()
+        wait(for: [completed], timeout: 2)
+        XCTAssertNil(reference)
+    }
+
+    func testSecondsConversionHandlesZeroSubmillisecondAndNegativeValues() {
+        for (input, expected) in [(0.0, 0), (0.0009, 0), (1.9999, 1999), (-1.25, -1250)] {
+            switch DispatchTimeInterval.fromSeconds(input) {
+            case .milliseconds(let value):
+                XCTAssertEqual(value, expected)
+            default:
+                XCTFail("Seconds must be represented as milliseconds")
+            }
+        }
+    }
+
     private func waitForMainQueue(milliseconds: Int) {
         let elapsed = expectation(description: "Main queue observation window")
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(milliseconds)) {
             elapsed.fulfill()
         }
         wait(for: [elapsed], timeout: 2)
+    }
+}
+
+private final class LifetimeProbe {
+    private let onDeinit: () -> Void
+
+    init(onDeinit: @escaping () -> Void) {
+        self.onDeinit = onDeinit
+    }
+
+    deinit {
+        onDeinit()
     }
 }

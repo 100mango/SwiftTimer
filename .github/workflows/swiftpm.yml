@@ -3,12 +3,14 @@ name: SwiftPM
 on:
   pull_request:
     branches: [master]
+  push:
+    branches: [master]
 
 permissions:
   contents: read
 
 concurrency:
-  group: swiftpm-${{ github.event.pull_request.number }}
+  group: swiftpm-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
